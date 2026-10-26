@@ -2,6 +2,7 @@
 import json
 import re
 import subprocess
+from datetime import datetime
 
 
 def get_events(event_ids, hours=24):
@@ -32,6 +33,26 @@ def parse_bugcheck(message):
         "code": int(m.group(1), 16),
         "params": [p.strip() for p in m.group(2).split(",")],
     }
+
+def group_incidents(events, window_seconds=120):
+    """Группирует события 41 и 1001 в инциденты по близости по времени."""
+    parsed = sorted(
+        events,
+        key=lambda e: datetime.fromisoformat(e["Time"][:26] + e["Time"][-6:]),
+    )
+    incidents = []
+    for e in parsed:
+        t = datetime.fromisoformat(e["Time"][:26] + e["Time"][-6:])
+        if incidents and (t - incidents[-1]["last_time"]).total_seconds() <= window_seconds:
+            incidents[-1]["events"].append(e)
+            incidents[-1]["last_time"] = t
+        else:
+            incidents.append({"first_time": t, "last_time": t, "events": [e]})
+
+    for inc in incidents:
+        ids = {ev["Id"] for ev in inc["events"]}
+        inc["type"] = "bsod" if 1001 in ids else "unexpected_shutdown"
+    return incidents
 
 
 if __name__ == "__main__":
