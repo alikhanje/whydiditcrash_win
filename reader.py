@@ -1,6 +1,8 @@
-
+# reader.py
 import json
+import re
 import subprocess
+
 
 def get_events(event_ids, hours=24):
     ids = ",".join(str(i) for i in event_ids)
@@ -17,11 +19,26 @@ def get_events(event_ids, hours=24):
     )
     out = result.stdout.strip()
     if not out:
-        return []              # событий не найдено
+        return []
     data = json.loads(out)
-    return [data] if isinstance(data, dict) else data   # одно событие приходит как dict
+    return [data] if isinstance(data, dict) else data
+
+
+def parse_bugcheck(message):
+    m = re.search(r"(0x[0-9a-fA-F]+)\s*\(([^)]*)\)", message)
+    if not m:
+        return None
+    return {
+        "code": int(m.group(1), 16),
+        "params": [p.strip() for p in m.group(2).split(",")],
+    }
+
 
 if __name__ == "__main__":
     for e in get_events([41, 1001], hours=72):
         print(e["Time"], e["Id"], e["ProviderName"])
         print(e["Message"][:200], "\n")
+
+        if e["Id"] == 1001:
+            print(parse_bugcheck(e["Message"]))
+            print()
