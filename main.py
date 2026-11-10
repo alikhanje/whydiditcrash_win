@@ -1,6 +1,6 @@
 # main.py
-from reader import get_events, parse_bugcheck, group_incidents
-from stop_codes import STOP_CODES
+from backend.reader import get_events, parse_bugcheck, group_incidents
+from backend.stop_codes import STOP_CODES
 
 
 def build_report(incident):
