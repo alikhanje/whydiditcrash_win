@@ -38,7 +38,6 @@ explains the stop code in plain language.
 Get the latest `WhyDidItCrash.exe` from the [Releases](../../releases) page
 and run it. No installation or Python required.
 
-![WhyDidItCrash window](docs/screenshots/window.png)
 
 ## How to use
 
