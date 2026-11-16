@@ -33,9 +33,24 @@ explains the stop code in plain language.
     tests/      pytest tests
     main.py     entry point, prints the crash report
 
+## Download
+
+Get the latest `WhyDidItCrash.exe` from the [Releases](../../releases) page
+and run it. No installation or Python required.
+
+![WhyDidItCrash window](docs/screenshots/window.png)
+
+## How to use
+
+1. Run `WhyDidItCrash.exe`
+2. Choose a period and press **Check**
+3. Select an incident in the list to read the explanation
+
+
+
+
 ## Roadmap
 
-- [ ] Store incident history in PostgreSQL
 - [ ] AI explanations for stop codes missing from the reference
 - [ ] System metrics (CPU, RAM) before a crash
 - [ ] Web dashboard

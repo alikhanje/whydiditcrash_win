@@ -17,6 +17,7 @@ def get_events(event_ids, hours=24):
     result = subprocess.run(
         ["powershell", "-NoProfile", "-Command", ps],
         capture_output=True, text=True, encoding="utf-8",
+        creationflags=subprocess.CREATE_NO_WINDOW,
     )
     out = result.stdout.strip()
     if not out:

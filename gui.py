@@ -13,7 +13,7 @@ class App(tk.Tk):
         self.geometry("820x520")
         self.incidents = []
 
-        # --- верхняя панель: период и кнопка ---
+
         top = ttk.Frame(self, padding=10)
         top.pack(fill="x")
         ttk.Label(top, text="Период, дней:").pack(side="left")
@@ -27,21 +27,19 @@ class App(tk.Tk):
         self.status = ttk.Label(top, text="Нажмите «Проверить»")
         self.status.pack(side="left")
 
-        # --- основная часть: список слева, отчёт справа ---
+
         body = ttk.Frame(self, padding=(10, 0, 10, 10))
         body.pack(fill="both", expand=True)
         self.listbox = tk.Listbox(body, width=32, exportselection=False)
         self.listbox.pack(side="left", fill="y")
         self.listbox.bind("<<ListboxSelect>>", self.show_selected)
-        self.text = tk.Text(body, wrap="word", state="disabled")
+        self.text = tk.Text(body, wrap="word", state="disabled",font=("Segoe UI",11),padx=12,pady=10)
         self.text.pack(side="left", fill="both", expand=True, padx=(10, 0))
 
     def start_scan(self):
         self.button.config(state="disabled")
         self.status.config(text="Проверяю журнал Windows...")
         hours = int(self.days.get()) * 24
-        # чтение журнала занимает пару секунд, поэтому делаем его в отдельном потоке,
-        # иначе окно «замёрзнет»
         threading.Thread(target=self.scan, args=(hours,), daemon=True).start()
 
     def scan(self, hours):

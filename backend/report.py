@@ -3,7 +3,7 @@ from backend.stop_codes import STOP_CODES
 
 
 def build_report(incident):
-    when = incident["first_time"].strftime("%Y-%m-%d %H:%M:%S")
+    when = incident["first_time"].strftime("%d.%m.%Y %H:%M:%S")
 
     if incident["type"] == "unexpected_shutdown":
         return (
